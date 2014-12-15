@@ -29,7 +29,7 @@ p <- ggplot(sport@data, aes(Partic_Per, Pop_2001))
 q <- p + geom_point(aes(colour = Partic_Per, size = Pop_2001)) +
   geom_text(size = 2, aes(label = name))
 
-## The the shapefiles into a format that can be plotted
+## Get the shapefiles into a format that can be plotted
 sport.f <- fortify(sport, region = "ons_label")
 ## This step has lost the attribute information associated with the sport object
 ## We add it back using the merge function
