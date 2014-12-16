@@ -47,8 +47,7 @@ world <- readShapePoly(filename)
 world@data <- data.frame(world@data,
                          counts[match(world@data[, "iso_a2"], counts[, "country"]), ])
 ## Save the new shapefile
-writePolyShape(world, "./data/world_r_use.shp")
-
+writePolyShape(world, "./data/world/world_r_use.shp")
 
 ## Plot the world map of R downloads
 world.f <- fortify(world, region = "country")
