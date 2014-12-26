@@ -7,9 +7,14 @@ library(rgeos)
 ## Load the world map shapefile
 filename <- "./data/ne_110m_admin_0_countries/ne_110m_admin_0_countries.shp"
 world <- readShapePoly(filename)
+badIndex <- which(world$name == "C\xf4te d'Ivoire")
 
 ## Load the visa restrictions data
-visa.restrictions <- read.csv(file = "./data/visa_restrictions.csv", header = TRUE)
+visa.restrictions <- read.csv(file = "./data/visa_restrictions.csv", header = TRUE,
+                              stringsAsFactor = FALSE)
+goodIndex <- which(visa.restrictions$Country == "Cote d'Ivoire")
+visa.restrictions$Country[goodIndex] <- toString(world$name[badIndex])
+
 matchIndices <- match(visa.restrictions$Country, world$name)
 mismatchIndices <- which(is.na(matchIndices))
 (visa.restrictions$Country[mismatchIndices])
