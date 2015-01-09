@@ -1,0 +1,268 @@
+x <- seq(0, 1, length = 500)
+summary(x)
+?curve
+?dbeta
+curve(dbeta(x, 16, 4), lty = 4, xlab = "Intensity")
+curve(dbeta(x, 8/3, 4), add = TRUE, lty = 3)
+curve(dbeta(x, 1, 4), add = TRUE, lty = 1)
+legend(x = 'top', expression(italic(p) == 1, italic (p) == 8/3, italic(p) == 6, italic(p) == 16), bty = 'n', lty = 1:4)
+quit()
+source("http://bioconductor.org/biocLite.R")
+biocLite("Biostrings")
+quit()
+attach(airquality)
+Month <- factor(Month, labels = month.abs[5:9])
+Month <- factor(Month, labels = month.abb[5:9])
+Month
+Ozone
+length(Ozone)
+summary(airquality)
+pairwise.wilcox.test(Ozone, Month)
+pairwise.wilcox.test(Ozone, Month, p.adj = "bonf")
+detach()
+quit()
+library(depmixS4)
+data(speed)
+summary(speed)
+dim(spped)
+dim(speed)
+speed[1:20, ]
+plt(speed$rt, speed$Pacc)
+plot(speed$rt, speed$Pacc)
+plot(speed$rt, speed$Pacc, pch = 19)
+plot(speed$rt, speed$Pacc, pch = 19, col = "blue")
+names(speed)
+hist(sped$rt)
+hist(speed$rt)
+hist(speed$Pacc)
+hist(speed$corr)
+?glm
+?fit
+set.seed(1)
+mod <- depmix(response = rt ~ 1, data = speed, nstates = 2, trstart = runif(4))
+mod
+?depmix
+summary(mod)
+runif(4)
+fm <- fit(mod, emc = em.control(rand = FALSE))
+fm
+summary(fm)
+set.seed(1)
+mod <- depmix(rt ~ 1, data = speed, nstates = 2, family = gaussian(), transition = ~ scale(Pacc), instart = runif(2))
+?scle
+?scale
+fm <- fit(mod, verbose = FALSE, emc = em.control(rand = FALSE))
+summary(fm)
+summary(fm, which = "transition")
+summary(speed$Pacc)
+?mlogit
+foo <- scale(speed$Pacc)
+foo
+summary(foo)
+summary(speed$Pacc)
+hist(foo)
+hist(speed$Pacc)
+summary(fit)
+summary(fm)
+names(speed)
+attach(speed)
+hist(rt)
+hist(corr)
+hist(Pacc)
+boxplot(rt)
+set.seed(1)
+mod <- depmix(list(rt ~ 1, corr ~ 1), data = speed, nstates = 2, family = list(gaussian(), multinomial("identity")), transition = ~scale(Pacc), instart = runif(2))
+summary(mod)
+fm <- fit(mod, emc = em.control(rand = FALSE))
+summary(fm, which = "transition")
+summary(fm, which = "response")
+?solnp
+?Rsolnp
+?conpat
+?logLik
+?npar
+data(balance)
+summary(balance)
+dim(balance)
+set.seed(1)
+?mix
+mod <- mix(list(d1 ~ 1, d2 ~ 1, d3 ~ 1, d4 ~ 1), data = balance, nstates = 3, family = list(multinomial("identity"), multinomial("identity"), multinomial("identity"), multinomial("identity")), respstart = runif(24), prior = ~age, initdata = balance)
+fm <- fit(mod, verbose = FALSE, emc = em.control(rand = FALSE))
+fm
+summary(fm)
+summary(fm, which = "prior")
+library("gamlss")
+?glm
+summary(speed)
+dim(speed)
+hist(rt)
+hist(rt, breaks = 50)
+library(nnet)
+?nnet
+quit()
+?Gamma
+?rgamma
+quit()
+?cumsum
+quit()
+install.packages("R2OpenBUGS")
+quit()
+require(devtools)
+install.packages("devtools")
+require(devtools)
+install_github("cowsay", "SChamberlain")
+say("Happy Thanksgiving", by = "chicken")
+require(cowsay)
+?devtools
+quit()
+about()
+version()
+ver()
+quit()
+install.packages("R2OpenBUGS")
+quit()
+install.packages(c("rj", "rj.gd"), repos="http://download.walware.de/rj-1.1")
+quit()
+as.numeric("3")
+as.numeric("2")
+as.numeric("3") == as.numeric("3")
+winver()
+quit()
+cd /Library/Frameworks/R.framework
+cd /Library/Frameworks/R.version.string
+quit()
+x <- c(0, 5, 30, 80, 1000)
+y <- c(150, 2000, 2010, 3000)
+grd <- expand.grid(x = x, y = y)
+z <- matrix(grd$x*2 - grd$y*2, nrow = length(x), ncol = length(y), byrow = TRUE)
+image(x = x, y = y, z = z, col = rainbow(20))
+heatmap(matrix(sample(1:10000),nrow=1000,ncol=10))
+library(gplots)
+row.scaled.expr <- matrix(sample(1:10000),nrow=1000,ncol=10)
+head(row.scaled.expr)
+heatmap.2(row.scaled.expr, dendrogram ='row',#
+                 Colv=FALSE, col=greenred(800), #
+                 key=FALSE, keysize=1.0, symkey=FALSE, density.info='none',#
+                 trace='none', colsep=1:10,#
+                 sepcolor='white', sepwidth=0.05,#
+                 scale="none",cexRow=0.2,cexCol=2,#
+                 labCol = colnames(row.scaled.expr),                 #
+                 hclustfun=function(c){hclust(c, method='mcquitty')},#
+                 lmat=rbind( c(0, 3), c(2,1), c(0,4) ), lhei=c(0.25, 4, 0.25 ),                 #
+                 )
+dev.list()
+row.scaled.expr <- matrix(sample(1:10000),nrow=150,ncol=10)
+row.scaled.expr <- matrix(sample(1:100),nrow=150,ncol=10)
+heatmap.2(row.scaled.expr, dendrogram ='row',#
+                 Colv=FALSE, col=greenred(800), #
+                 key=FALSE, keysize=1.0, symkey=FALSE, density.info='none',#
+                 trace='none', colsep=1:10,#
+                 sepcolor='white', sepwidth=0.05,#
+                 scale="none",cexRow=0.2,cexCol=2,#
+                 labCol = colnames(row.scaled.expr),                 #
+                 hclustfun=function(c){hclust(c, method='mcquitty')},#
+                 lmat=rbind( c(0, 3), c(2,1), c(0,4) ), lhei=c(0.25, 4, 0.25 ),                 #
+                 )
+heatmap.2(x, lmat=rbind( c(0, 3, 4), c(2,1,0 ) ), lwid=c(1.5, 4, 2 ) )
+data(mtcars)
+x <- as.matrix(mtcars)
+heatmap.2(x, lmat=rbind( c(0, 3, 4), c(2,1,0 ) ), lwid=c(1.5, 4, 2 ) )
+heatmap.2(x, lwid=c(1.5, 4, 2 ) )
+x
+heatmap.2(x, lmat=rbind( c(0, 3, 4), c(2,1,0 )), lwid=c(1.5, 4, 2) )
+heatmap.2(x, lmat=rbind( c(0, 3, 4), c(2,1,0 )), lwid=c(1.5, 4, 2), trace = "none")
+heatmap.2(x, lmat=rbind( c(0, 3, 4), c(2,1,0 )), lwid=c(2, 2, 2), trace = "none")
+heatmap.2(x, lmat=rbind( c(0, 3, 4), c(2,1,0 )), lwid=c(4, 4, 4), trace = "none")
+heatmap.2(x, lmat=rbind( c(0, 3, 4), c(2,1,0 )), lwid=c(1.5, 4, 2), trace = "none")
+x <- 1:10
+y <- c(2,4,6,8,7,12,14,16,18,20)
+y
+plot(x, y)
+lo <- loess(y ~ x)
+plot(x, y)
+lines(predict(lo), col='red', lwd=2)
+foo <- lines(predict(lo), col='red', lwd=2)
+fo
+foo
+length(foo)
+summary(foo)
+?lines
+foo <- predict(lo)
+foo
+length(foo)
+?lines
+length(x)
+length(y)
+quit()
+demo(synthetic, package = "Rcartogram")
+new.boundaries
+getwd()
+setwet('./Documents/workspace/geospatial/')
+setwd('./Documents/workspace/geospatial/')
+source("./code/synthetic.R")
+cart
+image(cart)
+dim(cart)
+typeof(cart)
+length(cart)
+head(cart)
+names(cart)
+cart[["x"]]
+cart[["y"]]
+dim(big)
+imgage(1:nrow(big), 1:ncol(big), t(big))
+image(1:nrow(big), 1:ncol(big), t(big))
+new.boundaries
+length(new.boundaries)
+?polygon
+invisible(sapply(new.boundaries, polygon, lwd = 4, lty = 3, border = "blue"))
+invisible(sapply(new.boundaries[[1]], polygon, lwd = 4, lty = 3, border = "blue"))
+invisible(sapply(new.boundaries[[2]], polygon, lwd = 4, lty = 3, border = "blue"))
+invisible(sapply(new.boundaries[[3]], polygon, lwd = 4, lty = 3, border = "blue"))
+invisible(sapply(new.boundaries[[4]], polygon, lwd = 4, lty = 3, border = "blue"))
+polygon(new.boundaries)
+polygon(new.boundaries[[1]])
+image(1:N, 1:N, t(dat))
+polygon(new.boundaries[[1]])
+polygon(new.boundaries[[2]])
+polygon(new.boundaries[[3]])
+polygon(new.boundaries[[4]])
+polygon(new.boundaries[[5]])
+new.boundaries[[1]]
+new.boundaries[[1]]$x == new.boundaries[[1]]$y
+plotInExpanded
+source("./code/synthetic.R")
+source("./code/synthetic.R")
+plotInExpanded
+names(new.boundaries)
+length(new.boundaries)
+new.boundaries
+new.boundaries[[4]]$x == new.boundaries[[4]]$y
+new.boundaries[[1]]$x == new.boundaries[[1]]$y
+new.boundaries[[2]]$x == new.boundaries[[1]]$y
+new.boundaries[[2]]$x == new.boundaries[[2]]$y
+new.boundaries[[3]]$x == new.boundaries[[3]]$y
+rm(list = ls())
+library(devtools)
+install.packages(devtools)
+install.packages("devtools")
+library(devtools)
+?install_github
+install_github("chrisbrunsdon/getcartr", subdir = "getcartr")
+library(getcartr)
+quick.carto
+?quick.carto
+data(georgia)
+names(georgia)
+head(georgia)
+names(georgia)
+georgia.carto <- quick.carto(georgia, georgia$TotPop90, blur = 1)
+par(mfrow = c(1, 2), mar = c(0.5, 0.5, 3, 0.5))
+georgia.carto <- quick.carto(georgia, georgia2$TotPop90, blur = 1)
+?quick.carto
+plot(georgia2)
+title("Original Projection")
+plot(georgia.carto)
+title("Cartogram Projection")
+rm(list = ls())
+quit()
