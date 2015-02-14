@@ -24,7 +24,7 @@ world@data <- data.frame(world@data,
                          visa.restrictions[match(world@data[, "name"],
                                                  visa.restrictions[, "Country"]), ])
 
-## Plot the world map of R downloads
+## Plot the world map of visa restriction index
 world.f <- fortify(world, region = "Country")
 world.f <- merge(world.f, world@data, by.x = "id", by.y = "Country")
 Map <- ggplot(world.f, aes(long, lat, group = group, fill = Score)) + geom_polygon()
