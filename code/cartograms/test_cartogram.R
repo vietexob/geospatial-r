@@ -5,15 +5,18 @@ library(Rcartogram)
 library(maptools)
 library(ggplot2)
 library(rgeos)
+
 ## Only if getcartr is not installed ##
 # install_github("chrisbrunsdon/getcartr", subdir = "getcartr")
 library(getcartr)
+
+source("./code/visualization/fivethirtyeight_theme.R")
 
 data(georgia)
 
 ## "georgia2" is used as it has a plane projection coordinate system
 georgia.carto <- quick.carto(georgia2, georgia2$TotPop90, blur = 1)
-# filename <- "./figures/georgia_pop_carto.pdf"
+# filename <- "./figures/cartograms/georgia_pop_cartogram.pdf"
 # pdf(file = filename)
 op <- par(mfrow = c(1, 2), mar = c(0.5, 0.5, 3, 0.5))
 plot(georgia2)
@@ -51,11 +54,12 @@ world@data <- data.frame(world@data,
 world.carto <- quick.carto(world, world$Score, blur = 0)
 world.f <- fortify(world.carto, region = "Country")
 world.f <- merge(world.f, world@data, by.x = "id", by.y = "Country")
-Map <- ggplot(world.f, aes(long, lat, group = group, fill = Score)) + geom_polygon()
-(Map <- Map + ggtitle("Cartogram of the International Freedom of Movement Index 2014"))
+Map <- ggplot(world.f, aes(long, lat, group = group, fill = Score)) +
+  geom_polygon() + fivethirtyeight_theme()
+(Map <- Map + ggtitle("Cartogram of the International Freedom of Movement Index (2014)"))
 
 ## Save a really large map
-filename <- "./figures/visa_restrictions_carto.png"
+filename <- "./figures/cartograms/visa_restriction_cartogram.png"
 width <- par("din")[1]
 height <- width / 1.68
 ggsave(filename, scale = 1.5, dpi = 400, width = width, height = height)
