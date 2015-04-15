@@ -1,4 +1,5 @@
 fivethirtyeight_theme <- function() {
+  library(grid)
   
   # Generate the colors for the chart procedurally with RColorBrewer
   palette <- brewer.pal("Greys", n=9)
