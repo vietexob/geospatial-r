@@ -19,9 +19,3 @@ atl.un <- read.csv(file="./data/leaflet/FRED-ALTA-unemployment.csv",
 ## Convert this into a time-series object
 atl.ts <- ts(data=atl.un$Unemployment, frequency=12, start=c(1990, 1))
 dygraph(atl.ts, main="Monthly Atlanta Unemployment Rate")
-
-
-
-
-
-
