@@ -14,8 +14,7 @@ zipdata <- zipdata[order(zipdata$centile),]
 
 shinyServer(function(input, output, session) {
 
-  ## Interactive Map ###########################################
-
+  ## Interactive Map ##
   # Create the map
   output$map <- renderLeaflet({
     leaflet() %>%
@@ -62,7 +61,8 @@ shinyServer(function(input, output, session) {
     if (nrow(zipsInBounds()) == 0)
       return(NULL)
 
-    print(xyplot(income ~ college, data = zipsInBounds(), xlim = range(allzips$college), ylim = range(allzips$income)))
+    print(xyplot(income ~ college, data = zipsInBounds(), xlim = range(allzips$college),
+                 ylim = range(allzips$income)))
   })
 
   # This observer is responsible for maintaining the circles and legend,
@@ -123,9 +123,7 @@ shinyServer(function(input, output, session) {
     })
   })
 
-
-  ## Data Explorer ###########################################
-
+  ## Data Explorer ##
   observe({
     cities <- if (is.null(input$states)) character(0) else {
       filter(cleantable, State %in% input$states) %>%

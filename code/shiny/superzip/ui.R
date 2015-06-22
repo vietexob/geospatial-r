@@ -10,12 +10,9 @@ vars <- c(
   "Population" = "adultpop"
 )
 
-
 shinyUI(navbarPage("Superzip", id="nav",
-
   tabPanel("Interactive map",
     div(class="outer",
-
       tags$head(
         # Include our custom CSS
         includeCSS("styles.css"),
@@ -43,7 +40,8 @@ shinyUI(navbarPage("Superzip", id="nav",
       ),
 
       tags$div(id="cite",
-        'Data compiled for ', tags$em('Coming Apart: The State of White America, 1960–2010'), ' by Charles Murray (Crown Forum, 2012).'
+        'Data compiled for ', tags$em('Coming Apart: The State of White America, 1960–2010'),
+        ' by Charles Murray (Crown Forum, 2012).'
       )
     )
   ),
@@ -51,7 +49,8 @@ shinyUI(navbarPage("Superzip", id="nav",
   tabPanel("Data explorer",
     fluidRow(
       column(3,
-        selectInput("states", "States", c("All states"="", structure(state.abb, names=state.name), "Washington, DC"="DC"), multiple=TRUE)
+        selectInput("states", "States", c("All states"="", structure(state.abb, names=state.name),
+                                          "Washington, DC"="DC"), multiple=TRUE)
       ),
       column(3,
         conditionalPanel("input.states",
