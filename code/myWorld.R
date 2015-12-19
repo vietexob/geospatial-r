@@ -10,14 +10,14 @@ world <- readShapePoly(filename)
 
 ## Load my world data
 my.world <- read.csv(file = "./data/my_world2.csv", header = TRUE)
-Been_To <- world$name %in% my.world$Country2
-world@data <- data.frame(world@data, Been_To)
+visited <- world$name %in% my.world$Country2
+world@data <- data.frame(world@data, visited)
 
 ## Plot the world map of R downloads
 world.f <- fortify(world, region = "name")
 world.f <- merge(world.f, world@data, by.x = "id", by.y = "name")
-Map <- ggplot(world.f, aes(long, lat, group = group, fill = Been_To)) + geom_polygon()
-(Map <- Map + ggtitle("Countries I Have Been To as of Dec 20, 2014"))
+Map <- ggplot(world.f, aes(long, lat, group = group, fill = visited)) + geom_polygon()
+(Map <- Map + ggtitle("Countries I've Visited as of Dec 20, 2015"))
 
 ## Save a really large map
 filename <- "./figures/my_world.png"
