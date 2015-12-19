@@ -6,7 +6,7 @@ rm(list = ls())
 library(rgdal)
 library(leaflet)
 
-mexico <- readOGR(dsn="./data/mexico/", layer="mexico", encoding="UTF-8")
+mexico <- readOGR(dsn="./data/mexico", layer="mexico", encoding="UTF-8")
 head(mexico@data)
 
 ## The variable we are interested in mapping is gdp08, which is per capita
@@ -18,7 +18,7 @@ pal <- colorQuantile("YlGn", NULL, n=5)
 ## 2. Define parameters of HTML pop-up
 state_popup <- paste0("<strong>Estado: </strong>",
                       mexico$name,
-                      "<br><strong>PIB per cápita, miles de pesos, 2008: </strong>",
+                      "<br><strong>PIB per capita, miles de pesos, 2008: </strong>",
                       mexico$gdp08)
 mb_tiles <- "http://a.tiles.mapbox.com/v3/kwalkertcu.l1fc0hab/{z}/{x}/{y}.png"
 mb_attribution <- 'Mapbox <a href="http://mapbox.com/about/maps" target="_blank">Terms &amp; Feedback</a>'
