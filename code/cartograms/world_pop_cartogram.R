@@ -2,9 +2,7 @@ rm(list = ls())
 
 library(devtools)
 library(Rcartogram)
-library(maptools)
 library(ggplot2)
-library(rgeos)
 library(getcartr)
 
 source("./code/visualization/fivethirtyeight_theme.R")
@@ -15,7 +13,7 @@ world <- readShapePoly(world.filename)
 
 ## Load the world pop file
 pop.filename <- "./data/world_bank/sp.pop.totl_Indicator_en_csv_v2.csv"
-world.pop <- read.csv(file = pop.filename, header = TRUE)
+world.pop <- read.csv(file = pop.filename, stringsAsFactors = FALSE)
 smaller.data <- data.frame(Country.Code = world.pop$Country.Code,
                            Population = world.pop$X2013)
 smaller.data <- na.omit(smaller.data)
@@ -25,7 +23,8 @@ plot.nameStr <- "Cartogram of the World's Population by Country (2013)"
 matched.indices <- match(world@data[, "ISO3"], smaller.data[, "Country.Code"])
 world@data <- data.frame(world@data, smaller.data[matched.indices, ])
 
-world.carto <- quick.carto(world, world@data$Population, blur = 0)
+## Have to set blur > 0 in order to work!
+world.carto <- quick.carto(world, world@data$Population, blur = 0.5)
 world.f <- fortify(world.carto, region = "Country.Code")
 world.f <- merge(world.f, world@data, by.x = "id", by.y = "Country.Code")
 Map <- ggplot(world.f, aes(long, lat, group = group, fill = world.f$Population)) +

@@ -2,9 +2,7 @@ rm(list = ls())
 
 library(devtools)
 library(Rcartogram)
-library(maptools)
 library(ggplot2)
-library(rgeos)
 library(getcartr)
 
 source("./code/visualization/fivethirtyeight_theme.R")
