@@ -25,12 +25,12 @@ plot.nameStr <- "Largest Economies in the World (by GDP in 2013)"
 matched.indices <- match(world@data[, "ISO3"], smaller.data[, "Country.Code"])
 world@data <- data.frame(world@data, smaller.data[matched.indices, ])
 
-world.carto <- quick.carto(world, world@data$GDP, blur = 1)
+world.carto <- quick.carto(world, world@data$GDP, blur = 0.5)
 world.f <- fortify(world.carto, region = "Country.Code")
 world.f <- merge(world.f, world@data, by.x = "id", by.y = "Country.Code")
-Map <- ggplot(world.f, aes(long, lat, group = group, fill = world.f$GDP)) +
+my_map <- ggplot(world.f, aes(long, lat, group = group, fill = world.f$GDP)) +
   labs(fill = "GDP") + geom_polygon() + fivethirtyeight_theme()
-(Map <- Map + ggtitle(plot.nameStr))
+(my_map <- my_map + ggtitle(plot.nameStr))
 
 ## Save a really large map
 width <- par("din")[1]
@@ -46,20 +46,20 @@ smaller.data <- data.frame(Country.Code = world.gdppc$Country.Code,
 smaller.data <- na.omit(smaller.data)
 # smaller.data$GDPPC <- smaller.data$GDPPC / 1000
 
-plot.nameStr <- "Richest Countries in the World by GDP per Capita (2013)"
+plot.nameStr <- "Countries by GDP per Capita (2013)"
 ## Join the two datasets
 matched.indices <- match(world@data[, "ISO3"], smaller.data[, "Country.Code"])
 world@data <- data.frame(world@data, smaller.data[matched.indices, ])
 
-world.carto <- quick.carto(world, world@data$GDPPC, blur = 1)
+world.carto <- quick.carto(world, world@data$GDPPC, blur = 0.5)
 world.f <- fortify(world.carto, region = "Country.Code")
 world.f <- merge(world.f, world@data, by.x = "id", by.y = "Country.Code")
-Map <- ggplot(world.f, aes(long, lat, group = group, fill = world.f$GDPPC)) +
+my_map <- ggplot(world.f, aes(long, lat, group = group, fill = world.f$GDPPC)) +
   labs(fill = "GDPPC") + geom_polygon() + fivethirtyeight_theme()
-(Map <- Map + ggtitle(plot.nameStr))
+(my_map <- my_map + ggtitle(plot.nameStr))
 
 ## Save a really large map
 width <- par("din")[1]
 height <- width / 1.68
-plot.filename <- "./figures/cartograms/world_gdp_pc_cartogram.png"
-ggsave(plot.filename, scale = 1.5, dpi = 400, width = width, height = height)
+plot.filename <- "./figures/cartograms/world_gdp_capita_cartogram.png"
+ggsave(plot.filename, width = width, height = height)
