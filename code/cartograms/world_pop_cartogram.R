@@ -28,7 +28,7 @@ world.carto <- quick.carto(world, world@data$Population, blur = 0.5)
 world.f <- fortify(world.carto, region = "Country.Code")
 world.f <- merge(world.f, world@data, by.x = "id", by.y = "Country.Code")
 my_map <- ggplot(world.f, aes(long, lat, group = group, fill = world.f$Population)) +
-  labs(fill = "Population") + geom_polygon() + fivethirtyeight_theme()
+  geom_polygon() + fivethirtyeight_theme()
 (my_map <- my_map + ggtitle(plot.nameStr))
 
 ## Save a really large map
