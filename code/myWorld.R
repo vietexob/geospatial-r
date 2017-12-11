@@ -17,7 +17,7 @@ world@data <- data.frame(world@data, visited)
 world.f <- fortify(world, region = "name")
 world.f <- merge(world.f, world@data, by.x = "id", by.y = "name")
 Map <- ggplot(world.f, aes(long, lat, group = group, fill = visited)) + geom_polygon()
-(Map <- Map + ggtitle("Countries I've Visited as of Dec 20, 2015"))
+(Map <- Map + ggtitle("Countries I've Visited as of Dec 2017"))
 
 ## Save a really large map
 filename <- "./figures/my_world.png"
