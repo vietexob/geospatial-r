@@ -6,6 +6,23 @@ load("data/pgh_coords.RData")
 
 source("./convertSPLines.R")
 
+get_train_data <- function(is_weekday, time) {
+  train_data <- read.csv("data/pgh_train.csv")
+  
+  if(is_weekday) {
+    train_data <- subset(train_data, is.weekday==1)
+  } else {
+    train_data <- subset(train_data, is.weekday==0)
+  }
+  
+  train_data <- switch(time,
+                       "1" = subset(train_data, time==8),
+                       "2" = subset(train_data, time==14),
+                       "3" = subset(train_data, time==20))
+  
+  return(train_data)
+}
+
 shinyServer(function(input, output, session) {
   ## These reactive expressions (functions) get rerun only when the original widgets change
   inputData <- reactive({
@@ -15,17 +32,7 @@ shinyServer(function(input, output, session) {
     
     # speed prediction
     if(is.training) {
-      if(is.weekday) {
-        input.data <- switch(input$time,
-                             "1" = read.csv("data/pgh_weekday_train_8.csv"),
-                             "2" = read.csv("data/pgh_weekday_train_14.csv"),
-                             "3" = read.csv("data/pgh_weekday_train_20.csv"))
-      } else {
-        input.data <- switch(input$time,
-                             "1" = read.csv("data/pgh_weekend_train_8.csv"),
-                             "2" = read.csv("data/pgh_weekend_train_14.csv"),
-                             "3" = read.csv("data/pgh_weekend_train_20.csv"))
-      }
+      input.data <- get_train_data(is.weekday, input$time)
     } else {
       if(is.weekday) {
         train.data <- switch(input$time,
