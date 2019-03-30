@@ -10,11 +10,6 @@ shinyUI(bootstrapPage(
   absolutePanel(top = 10, right = 10,
                 helpText("Global Relational GP with Side Information."),
                 
-                radioButtons("viz", label = h5("Choose a visualization:"),
-                             choices = list('Spatial Clusters' = 0,
-                                            "Speed Prediction" = 1),
-                             selected = 0),
-                
                 selectInput('train', label = 'Training or prediction?',
                             choices = list('Training' = 0, 'Prediction' = 1), selected = 0),
                 
