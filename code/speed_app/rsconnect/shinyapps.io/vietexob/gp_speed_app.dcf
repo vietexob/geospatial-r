@@ -1,0 +1,8 @@
+name: gp_speed_app
+account: vietexob
+server: shinyapps.io
+bundleId: 322928
+url: https://vietexob.shinyapps.io/gp_speed_app
+when: 1449030595.1402
+asMultiple: FALSE
+asStatic: FALSE
