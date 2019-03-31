@@ -1,24 +1,40 @@
 # Clear the workspace
 rm(list = ls())
 
-df_train <- read.csv('./code/speed_app/data/pgh_train.csv')
-df_pred <- read.csv('./code/speed_app/data/pgh_pred.csv')
-df_segment <- read.csv('./code/speed_app/data/pgh_segments.csv')
+library(leaflet)
+library(scales)
+source("./code/speed_app/convertSPLines.R")
 
-is_weekday <- TRUE
-select_time <- 14
+load("./code/speed_app/data/pgh_coords.RData")
 
-# Subset the training and prediction set by day and time
-if(is_weekday) {
-  df_train <- subset(df_train, is.weekday==1)
-  df_pred <- subset(df_pred, is.weekday==1)
-} else {
-  df_train <- subset(df_train, is.weekday==0)
-  df_pred <- subset(df_pred, is.weekday==0)
+get_input_data <- function(is_weekday, select_time, is_training=TRUE) {
+  if(is_training) {
+    input_data <- read.csv("./code/speed_app/data/pgh_train.csv")
+  } else {
+    input_data <- read.csv("./code/speed_app/data/pgh_pred.csv")
+  }
+  
+  if(is_weekday) {
+    input_data <- subset(input_data, is.weekday==1)
+  } else {
+    input_data <- subset(input_data, is.weekday==0)
+  }
+  
+  time_values <- unique(input_data$time)
+  if(select_time %in% time_values) {
+    input_data <- subset(input_data, time==select_time)
+  } else {
+    stop('The select time is invalid: ', select_time)
+  }
+  
+  return(input_data)
 }
 
-df_train <- subset(df_train, time==select_time)
-df_pred <- subset(df_pred, time==select_time)
+is_weekday <- TRUE
+select_time <- 20
+df_train <- get_input_data(is_weekday, select_time, is_training = TRUE)
+df_pred <- get_input_data(is_weekday, select_time, is_training = FALSE)
+df_segment <- read.csv('./code/speed_app/data/pgh_segments.csv')
 
 # Merge prediction with segment data frame
 pred_segment <- data.frame(from.x = df_segment$from.x,
@@ -33,3 +49,18 @@ df_train$is.weekday <- NULL
 
 # Then merge with the training set to get the complete speed data
 speed_data <- rbind(pred_segment, df_train)
+# Convert speed data into spatial lines for drawing
+speed_segment <- convertSPLines(speed_data)
+
+# Create the speed color legend
+pal <- colorNumeric("RdYlGn", domain = NULL, na.color = "#808080")
+
+leaflet(data = speed_segment) %>%
+  # clearShapes() %>% clearMarkers() %>% clearControls() %>%
+  addTiles(urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
+           attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>') %>%
+  setView(lng = allegheny_lon, lat = allegheny_lat, zoom = 14) %>%
+  addPolylines(color = ~pal(speed),
+               weight = 3, opacity = 0.90) %>%
+  addLegend("bottomleft", pal=pal, values=~speed, title='Speed (mph)',
+            opacity = 0.90)
