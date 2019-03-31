@@ -44,11 +44,6 @@ shinyServer(function(input, output, session) {
       
       pred.data <- get_input_data(is.weekday, input$time, is_training = FALSE)
       segment.data <- read.csv('data/pgh_segments.csv')
-      if(is.weekday) {
-        segment.data <- subset(segment.data, is.weekday==1)
-      } else {
-        segment.data <- subset(segment.data, is.weekday==0)
-      }
       
       input.data <- data.frame(from.x = segment.data$from.x,
                                from.y = segment.data$from.y,
