@@ -1,4 +1,4 @@
-convertSPLines <- function(input.data=data.frame(), is.speed=TRUE) {
+convertSPLines <- function(input.data=data.frame()) {
   ## Converts an input segment data frame into spatial lines data.
   library(sp)
   
@@ -6,14 +6,9 @@ convertSPLines <- function(input.data=data.frame(), is.speed=TRUE) {
   begin.coord <- data.frame(lon = input.data$from.x, lat = input.data$from.y)
   end.coord <- data.frame(lon = input.data$to.x, lat = input.data$to.y)
   
-  ## Road attributes
-  if(is.speed) {
-    speed <- round(input.data$speed, 2)
-    attribute.data <- data.frame(speed = speed, stringsAsFactors = FALSE)
-  } else {
-    member <- as.factor(input.data$class)
-    attribute.data <- data.frame(member = member)
-  }
+  ## Road segment attributes
+  speed <- round(input.data$speed, 2)
+  attribute.data <- data.frame(speed = speed, stringsAsFactors = FALSE)
   
   l <- vector("list", nrow(begin.coord))
   for (i in seq_along(l)) {
