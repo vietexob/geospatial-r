@@ -55,7 +55,7 @@ speed_segment <- convertSPLines(speed_data)
 # Create the speed color legend
 pal <- colorNumeric("RdYlGn", domain = NULL, na.color = "#808080")
 
-leaflet(data = speed_segment) %>%
+my_viz <- leaflet(data = speed_segment) %>%
   # clearShapes() %>% clearMarkers() %>% clearControls() %>%
   addTiles(urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
            attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>') %>%
@@ -64,3 +64,4 @@ leaflet(data = speed_segment) %>%
                weight = 3, opacity = 0.90) %>%
   addLegend("bottomleft", pal=pal, values=~speed, title='Speed (mph)',
             opacity = 0.90)
+print(my_viz)
