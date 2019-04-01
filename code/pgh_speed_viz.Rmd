@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Introduction
 
-This is the high-level introduction of the notebook.
+This is the high-level description of the notebook.
 
 Let's see what files are there in the input directory.
 
