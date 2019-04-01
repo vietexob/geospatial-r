@@ -1,0 +1,132 @@
+---
+title: "PGH Traffic Speed Dashboard Visualization"
+author: "Truc Viet Le"
+date: "01/04/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+This is the high-level introduction of the notebook.
+
+Let's see what files are there in the input directory.
+
+```{r echo=FALSE, message=FALSE}
+list.files('./speed_app/data/')
+```
+
+## Read the Input Data
+
+First, the road segment data.
+
+```{r echo=FALSE, message=FALSE}
+df_segment = read.csv('./speed_app/data/pgh_segments.csv')
+paste('Total number of segments =', nrow(df_segment))
+```
+
+Then the training and prediction data sets.
+
+```{r echo=FALSE, message=FALSE}
+get_input_data <- function(is_weekday, select_time, is_training=TRUE) {
+  if(is_training) {
+    input_data <- read.csv("./speed_app/data/pgh_train.csv")
+  } else {
+    input_data <- read.csv("./speed_app/data/pgh_pred.csv")
+  }
+  
+  if(is_weekday) {
+    input_data <- subset(input_data, is.weekday==1)
+  } else {
+    input_data <- subset(input_data, is.weekday==0)
+  }
+  
+  time_values <- unique(input_data$time)
+  if(select_time %in% time_values) {
+    input_data <- subset(input_data, time==select_time)
+  } else {
+    stop('The select time is invalid: ', select_time)
+  }
+  
+  return(input_data)
+}
+
+is_weekday <- TRUE
+select_time <- 20
+
+df_train <- get_input_data(is_weekday, select_time, is_training = TRUE)
+paste('Number of observed speed values =', nrow(df_train))
+
+df_pred <- get_input_data(is_weekday, select_time, is_training = FALSE)
+paste('Number of predicted speed values =', nrow(df_pred))
+```
+
+## Make the Visualization
+
+Create a new visualization data frame by combining predicted speed values with the segment data.
+
+```{r echo=FALSE, message=FALSE}
+speed_data <- data.frame(from.x = df_segment$from.x,
+                         from.y = df_segment$from.y,
+                         to.x = df_segment$to.x,
+                         to.y = df_segment$to.y,
+                         speed = df_pred$speed)
+print(dim(speed_data))
+```
+
+Create spatial lines from the speed data and assign color values to them
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(sp)
+library(scales)
+library(leaflet)
+
+convertSPLines <- function(input.data=data.frame()) {
+  ## Converts an input segment data frame into spatial lines data.
+  
+  ## Specify the coordinates of the ending points
+  begin.coord <- data.frame(lon = input.data$from.x, lat = input.data$from.y)
+  end.coord <- data.frame(lon = input.data$to.x, lat = input.data$to.y)
+  
+  ## Road segment attributes
+  speed <- round(input.data$speed, 2)
+  attribute.data <- data.frame(speed = speed, stringsAsFactors = FALSE)
+  
+  l <- vector("list", nrow(begin.coord))
+  for (i in seq_along(l)) {
+    l[[i]] <- Lines(list(Line(rbind(begin.coord[i, ], end.coord[i,]))), as.character(i))
+  }
+  output <- SpatialLines(l)
+  final.output <- SpatialLinesDataFrame(output, data = attribute.data)
+  
+  return(final.output)
+}
+
+# Convert speed data into spatial lines for drawing
+speed_segment <- convertSPLines(speed_data)
+print('Conversion completed!')
+
+# Create the speed color legend
+pal <- colorNumeric("RdYlGn", domain = NULL, na.color = "#808080")
+```
+
+Put visualization on the map
+
+```{r echo=FALSE, message=FALSE}
+# Pre-defined constants: Central coordinates of PGH
+PGH_LON <- -79.98606 # longitude coordinate
+PGH_LAT <- 40.44796 # latitude coordinate
+
+my_viz <- leaflet(data = speed_segment) %>%
+  addTiles(urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
+           attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>') %>%
+  setView(lng = PGH_LON, lat = PGH_LAT, zoom = 14) %>%
+  addPolylines(color = ~pal(speed),
+               weight = 3, opacity = 0.90) %>%
+  addLegend("bottomleft", pal=pal, values=~speed, title='Speed (mph)',
+            opacity = 0.90)
+my_viz
+```
