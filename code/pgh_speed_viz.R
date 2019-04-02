@@ -30,8 +30,16 @@ get_input_data <- function(is_weekday, select_time, is_training=TRUE) {
   return(input_data)
 }
 
-is_weekday <- TRUE
-select_time <- 20
+is_weekday <- sample(c(FALSE, TRUE), size = 1)
+if(is_weekday) {
+  paste('Speed data for:', 'Weekday')
+} else {
+  paste('Speed data for:', 'Weekend')
+}
+
+select_time <- sample(c(8, 14, 20), size = 1)
+paste('Select time =', select_time)
+
 df_train <- get_input_data(is_weekday, select_time, is_training = TRUE)
 df_pred <- get_input_data(is_weekday, select_time, is_training = FALSE)
 df_segment <- read.csv('./code/speed_app/data/pgh_segments.csv')
